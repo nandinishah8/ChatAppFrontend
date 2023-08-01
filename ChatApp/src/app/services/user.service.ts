@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
+import jwt_decode from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root',
@@ -34,5 +35,23 @@ export class UserService {
   }
   isLoggedIn(): boolean {
     return !!this.getToken();
+  }
+
+  retrieveUsers(): Observable<any[]> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${this.getToken()}`,
+    });
+    return this.http.get<any[]>(this.url + '/users', { headers: headers });
+  }
+
+  getLoggedInUser(): number {
+    const decodedToken: any = jwt_decode(this.getToken()!.toString());
+    const id =
+      decodedToken[
+        'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'
+      ];
+
+    return +id;
   }
 }

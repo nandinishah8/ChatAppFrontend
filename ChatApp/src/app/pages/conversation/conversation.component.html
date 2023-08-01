@@ -1,0 +1,40 @@
+<div class="bg">
+    <nav class="navbar" style="background-color: #047BD5; height: 86px;">
+        <div class="container-fluid" style="justify-content: start;">
+            <a class="navbar-brand">
+                <div class="profile">
+                    <div class="user-image">
+                        <span>{{ currentReceiver?.name?.charAt(0) }}</span>
+                    </div>
+                </div>
+            </a>
+            <strong style="color: white;">{{ currentReceiver?.Name }}</strong>
+        </div>
+    </nav>
+    <div class="chat-container">
+        <div class="chat-messages">
+            <div style="padding: 8px; border-radius: 8px; max-width: 80%; margin: 4px 0; cursor: pointer; display: flex;"
+                [ngClass]="{
+          'chat-message outgoing': message.senderId === currentUserId,
+          'chat-message incoming': message.senderId !== currentUserId
+        }" *ngFor="let message of messages" (contextmenu)="onContextMenu($event, message)">
+                <span class="message-content" *ngIf="!message.editMode && !message.deleteMode">{{ message.content
+                    }}</span>
+                <div *ngIf="message.isEvent && !message.editMode && !message.deleteMode" class="editor-actions">
+
+                    <button class="edit-button" (click)="onEditMessage(message)"><i class="fa fa-pencil-square-o"
+                            aria-hidden="true"></i></button>
+                    <button class="delete-button" (click)="onDeleteMessage(message)"><i class="fa fa-trash-o"
+                            aria-hidden="true"></i></button>
+
+
+                </div>
+            </div>
+
+            <!-- Chat Input -->
+            <div class="chat-input">
+                <input type="text" placeholder="Type your message..." [(ngModel)]="messageContent" />
+                <button class="send-button"><i class="fa fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>

@@ -6,9 +6,11 @@ import { AppComponent } from './app.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { LoginComponent } from './pages/login/login.component';
 import { HttpClientModule } from '@angular/common/http';
+import { ChatComponent } from './pages/chat/chat.component';
+import { ConversationComponent } from './pages/conversation/conversation.component';
 
 @NgModule({
-  declarations: [AppComponent, RegisterComponent, LoginComponent],
+  declarations: [AppComponent, RegisterComponent, LoginComponent, ChatComponent, ConversationComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
