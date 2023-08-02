@@ -35,24 +35,52 @@
                             message.content
                             }}
                         </span>
-                        <div *ngIf="message.isEvent && !message.editMode && !message.deleteMode" class="editor-actions">
+                        <!-- <div *ngIf="message.isEvent && !message.editMode && !message.deleteMode" class="editor-actions">
 
                             <button class="edit-button" (click)="onEditMessage(message)"><i
                                     class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                             <button class="delete-button" (click)="onDeleteMessage(message)"><i class="fa fa-trash-o"
                                     aria-hidden="true"></i></button>
-
-
                         </div>
-                    </div>
+                        <div class="message-editor-container" *ngIf="message.editMode && !message.deleteMode">
+                            <input type="text" class="message-editor" [(ngModel)]="message.editedContent">
+                            <div class="editor-actions">
+                                <span class="accept-icon" (click)="onAcceptEdit(message)">&#10003;</span>
+                                <span class="decline-icon" (click)="onDeclineEdit(message)">&#10005;</span>
+                            </div>
+                        </div>
+                        <div class="message-editor-container" *ngIf="message.deleteMode && !message.editMode">
+                            <span>Are you sure want to delete this message ?</span>
+                            <div class="editor-actions">
+                                <span class="accept-icon" (click)="onAcceptDelete(message)">&#10003;</span>
+                                <span class="decline-icon" (click)="onDeclineDelete(message)">&#10005;</span>
+                            </div>
+                        </div> -->
+                        <div *ngFor="let message of messages">
+                            <div [ngClass]="{'current-user-message': message.userId === currentUserId}"
+                                (contextmenu)="onRightClick($event, message)">
+                                {{ message.content }}
+                            </div>
+                        </div>
 
-                    <!-- Chat Input -->
-                    <div class="chat-input">
-                        <input type="text" placeholder="Type your message..." [(ngModel)]="messageContent" />
-                        <button class="send-button"><i class="fa fa-send"></i></button>
+                        <!-- Inline editor -->
+                        <div *ngIf="editingMessage">
+                            <textarea [(ngModel)]="editingMessage.content"></textarea>
+                            <button (click)="acceptEdit(message)">Accept</button>
+                            <button (click)="cancelEdit(message)">Cancel</button>
+                        </div>
+
+
                     </div>
+                </div>
+
+                <!-- Chat Input -->
+                <div class="chat-input">
+                    <input type="text" placeholder="Type your message..." [(ngModel)]="messageContent" />
+                    <button class="send-button" (click)="sendMessage()"><i class="fa fa-send"></i></button>
                 </div>
             </div>
         </div>
     </div>
+
 </body>
