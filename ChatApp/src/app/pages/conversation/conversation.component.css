@@ -1,3 +1,36 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+ html,
+body {
+    height: 100%;
+}
+
+
+#chat-container {
+    display: flex;
+    flex-grow: 1;
+    min-width: 800px;
+    max-width: 2000px;
+   
+    height: 600px;
+    background: #FFF;
+    border-radius: 10px;
+}
+
+
+
+#chat-window {
+    border-radius: 0 10px 10px 0;
+    flex-grow: 1;
+    width: 250px;
+    
+}
+
+
 /* Styles for the main container */
 .bg {
     background-color: #f1f1f1;
@@ -6,8 +39,9 @@
 
 /* Styles for the top navigation bar */
 .navbar {
-    background-color: #047BD5;
+    background-color:  whitesmoke;
     height: 86px;
+    width: 1099px;
     display: flex;
     align-items: center;
 }
@@ -17,8 +51,10 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background-color: #fff;
+    background-color: black;
     display: flex;
+    margin-left: 15px;
+    padding-top: 10px;
     align-items: center;
     justify-content: center;
     font-size: 20px;
@@ -38,14 +74,14 @@ strong {
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 16px;
+    padding: 10px;
 }
 
 /* Styles for individual chat messages */
 .chat-message {
     padding: 8px;
     border-radius: 8px;
-    max-width: 80%;
+    max-width:fit-content;
     margin: 4px 0;
     cursor: pointer;
     display: flex;
@@ -55,13 +91,19 @@ strong {
 .outgoing {
     background-color: #047BD5;
     color: #fff;
-    justify-content: flex-end;
+    /* align-self: flex-end; */
+    max-width: fit-content;
+    padding: 8px;
+    border-radius: 8px;
+    max-width:fit-content;
+    cursor: pointer;
+    display: flex;
 }
 
 .incoming {
     background-color: #f1f1f1;
     color: #333;
-    justify-content: flex-start;
+    /* align-self: flex-start; */
 }
 
 /* Styles for editor actions */
