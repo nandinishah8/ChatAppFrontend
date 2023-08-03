@@ -15,11 +15,11 @@ import { map } from 'rxjs/operators';
 })
 export class ChatService {
   constructor(private http: HttpClient, private user: UserService) {}
-  url = 'https://localhost:5243/api/Messages';
+  url = 'http://localhost:5243/api/Messages';
 
   makeHttpRequest() {
     this.http
-      .get('https://localhost:5243/api/Messages')
+      .get('http://localhost:5243/api/Messages')
       .pipe(
         catchError((error: HttpErrorResponse) => {
           if (error.error instanceof ErrorEvent) {
