@@ -8,22 +8,26 @@ import { map } from 'rxjs/operators';
 })
 export class ChatService {
   constructor(private http: HttpClient, private user: UserService) {}
-  url = 'https://localhost:5243/api/Messages';
+  url = 'http://localhost:5243/api/Messages';
 
-  sendMessage(message: any): Observable<any> {
+  sendMessage(receiverId: number, content: string): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       Authorization: `Bearer ${this.user.getToken()}`,
     });
-    return this.http.post(this.url, message, { headers: headers });
+    const body = {
+      receiverId: receiverId,
+      content: content,
+    };
+    return this.http.post(this.url, body, { headers: headers }).pipe(
+      map((response: any) => {
+        console.log('sendMessage response:', response);
+        return response.messages;
+      })
+    );
   }
 
-  getMessages(
-    id: number
-    // before?: Date,
-    // count: number = 20,
-    // sort: string = 'asc'
-  ): Observable<any[]> {
+  getMessages(id: number): Observable<any[]> {
     let token = localStorage.getItem('auth_token');
     console.log(token);
 
@@ -31,14 +35,6 @@ export class ChatService {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     });
-    // let params = new HttpParams()
-    //   .set('userId', userId)
-    //   .set('count', count.toString())
-    //   .set('sort', sort);
-
-    // if (before) {
-    //   params = params.set('before', before.toISOString());
-    // }
 
     console.log(id);
 
@@ -52,5 +48,33 @@ export class ChatService {
           return response.messages;
         })
       );
+  }
+
+  editMessage(messageId: number, content: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${this.user.getToken()}`,
+    });
+    // const body = { message: content };
+
+    return this.http.put<any>(
+      `${this.url}/${messageId}`,
+      { content: content },
+      {
+        headers: headers,
+      }
+    );
+  }
+
+  // Method to delete a message
+  deleteMessage(messageId: number): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${this.user.getToken()}`,
+    });
+
+    return this.http.delete<any>(`${this.url}/${messageId}`, {
+      headers: headers,
+    });
   }
 }
