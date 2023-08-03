@@ -8,6 +8,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ChatComponent } from './pages/chat/chat.component';
 import { ConversationComponent } from './pages/conversation/conversation.component';
+import { RequestLogsComponent } from './pages/request-logs/request-logs.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { ConversationComponent } from './pages/conversation/conversation.compone
     LoginComponent,
     ChatComponent,
     ConversationComponent,
+    RequestLogsComponent,
   ],
   imports: [
     BrowserModule,

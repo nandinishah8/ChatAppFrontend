@@ -40,6 +40,11 @@ export class ConversationComponent implements OnInit {
         );
       });
     });
+
+    const savedMessages = localStorage.getItem('chatMessages');
+    if (savedMessages) {
+      this.messages = JSON.parse(savedMessages);
+    }
   }
 
   getMessages(userId: number) {
@@ -61,8 +66,13 @@ export class ConversationComponent implements OnInit {
 
     const message = {
       receiverId: this.currentReceiverId,
+      senderId: this.currentUserId,
       content: this.messageContent.trim(),
+      isEvent: false,
     };
+
+    this.messages.push(message);
+    localStorage.setItem('chatMessages', JSON.stringify(this.messages));
 
     this.chatService.sendMessage(message.receiverId, message.content).subscribe(
       (response) => {
