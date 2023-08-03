@@ -46,31 +46,35 @@ export class ConversationComponent implements OnInit {
     this.messages = [];
     console.log(userId);
 
-    this.chatService.getMessages(userId).subscribe(
-      (res) => {
-        console.log('getMessages response:', res);
-        this.messages = res;
-      }
-      // (error) => {
-      //   console.error('getMessages error:', error);
-      //   if (error.error == 'Conversation not found') {
-      //     this.messages = [];
-      //   }
-      // }
-    );
+    this.chatService.getMessages(userId).subscribe((res) => {
+      console.log('getMessages response:', res);
+      this.messages = res;
+    });
     console.log('getMessages messages:', this.messages);
   }
 
   sendMessage() {
-    console.log(this.messageContent);
-    let body = {
-      receiverId: this.currentReceiver.userId,
-      content: this.messageContent,
+    if (this.messageContent.trim() === '') {
+      // Don't send an empty message
+      return;
+    }
+
+    const message = {
+      receiverId: this.currentReceiverId,
+      content: this.messageContent.trim(),
     };
-    this.chatService.sendMessage(body).subscribe((res) => {
-      this.getMessages(this.currentReceiver.userId);
-      this.messageContent = '';
-    });
+
+    this.chatService.sendMessage(message.receiverId, message.content).subscribe(
+      (response) => {
+        // Handle the response from the backend if needed
+        this.messages.push(response);
+        this.messageContent = '';
+      },
+      (error) => {
+        console.error('Error sending message:', error);
+        // Handle the error if needed
+      }
+    );
   }
 
   onContextMenu(event: MouseEvent, message: any) {
@@ -78,6 +82,34 @@ export class ConversationComponent implements OnInit {
     if (message.senderId === this.currentUserId) {
       message.isEvent = !message.isEvent;
     }
+    this.sendMessage();
+  }
+
+  onAcceptEdit(message: any) {
+    // Update the message content with edited content
+    message.content = message.editedContent;
+    message.editMode = false;
+    console.log(message);
+
+    this.chatService.editMessage(message.id, message.content).subscribe(
+      (res) => {
+        const editedMessageIndex = this.messages.findIndex(
+          (m) => m.id === message.id
+        );
+        if (editedMessageIndex !== -1) {
+          this.messages[editedMessageIndex].content = message.editedContent;
+        }
+      },
+      (error) => {
+        console.error('Error editing message:', error);
+        // Handle the error if needed
+      }
+    );
+  }
+
+  onDeclineEdit(message: any) {
+    // Revert back to original content and close the inline editor
+    message.editMode = false;
   }
 
   onEditMessage(message: any) {
@@ -87,6 +119,27 @@ export class ConversationComponent implements OnInit {
       message.showContextMenu = true; // Add a property to control the context menu visibility
     }
   }
+
+  onAcceptDelete(message: any) {
+    this.chatService.deleteMessage(message.id).subscribe(
+      () => {
+        const index = this.messages.findIndex((m) => m.id === message.id);
+        if (index !== -1) {
+          this.messages.splice(index, 1); // Remove the message from the array
+        }
+      },
+      (error) => {
+        console.error('Error deleting message:', error);
+        // Handle the error if needed
+      }
+    );
+  }
+
+  onDeclineDelete(message: any) {
+    // Revert back to original content and close the inline editor
+    message.deleteMode = false;
+  }
+
   onDeleteMessage(message: any) {
     if (message.senderId === this.currentUserId) {
       message.deleteMode = true;
