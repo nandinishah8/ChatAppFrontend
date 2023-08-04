@@ -17,7 +17,7 @@ import {
 })
 export class ChatComponent implements OnInit {
   users: any[] = [];
-  currentReciever: any;
+  currentReceiver: any;
 
   constructor(private userService: UserService, private router: Router) {}
 
@@ -25,14 +25,14 @@ export class ChatComponent implements OnInit {
     this.userService.retrieveUsers().subscribe((res) => {
       console.log(res);
       this.users = res;
-      this.currentReciever = res[0];
+      this.currentReceiver = res[0];
     });
   }
 
   onUserClick(user: any) {
     console.log(user);
 
-    this.currentReciever = user;
+    this.currentReceiver = user;
   }
 
   showMessage(id: any) {
