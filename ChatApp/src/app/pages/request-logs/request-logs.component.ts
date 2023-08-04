@@ -7,17 +7,14 @@ import { LogsService } from 'src/app/services/logs.service';
   styleUrls: ['./request-logs.component.css'],
 })
 export class RequestLogsComponent {
-  [x: string]: any;
+  logs: any[] = [];
   selectedTimeframe: string = 'last5mins';
   customStartTime: string = '';
   customEndTime: string = '';
-  startTime!: Date;
-  endTime?: Date;
-  logs: any[] = [];
   showColumns: any = {
     id: true,
     timestamp: true,
-    ip: true,
+    ipAddress: true,
     username: true,
     requestBody: true,
   };
@@ -25,70 +22,39 @@ export class RequestLogsComponent {
   constructor(private logsService: LogsService) {}
 
   ngOnInit(): void {
-    this.fetchLogs();
-  }
-
-  fetchLogs(): void {
-    switch (this.selectedTimeframe) {
-      case 'last5mins':
-        this.getLastLogs(5);
-        break;
-      case 'last10mins':
-        this.getLastLogs(10);
-        break;
-      case 'last30mins':
-        this.getLastLogs(30);
-        break;
-      default:
-        // Custom timeframe
-        this.getLogs();
-        break;
-    }
-  }
-
-  getLastLogs(minutes: number): void {
-    const endTime = new Date();
-    const startTime = new Date(endTime.getTime() - minutes * 60000);
-    this.logsService
-      .getLogs(this.formatDate(startTime), this.formatDate(endTime))
-      .subscribe(
-        (res) => {
-          this.logs = res;
-        },
-        (error) => {
-          console.log(error.error);
-          this.logs = [];
-        }
-      );
+    this.getLogs();
   }
 
   getLogs(): void {
-    this.logsService.getLogs(this.startTime, this.endTime).subscribe(
-      (res) => {
-        this.logs = res;
-      },
-      (error) => {
-        console.log(error.error);
-        this.logs = [];
-      }
-    );
+    if (this.selectedTimeframe === 'last5mins') {
+      const now = new Date().getTime();
+      const startTime = new Date(now - 5 * 60 * 1000).toISOString();
+      const endTime = new Date(now).toISOString();
+      this.logsService
+        .getLogs(startTime, endTime)
+        .subscribe((logs) => (this.logs = logs));
+    } else if (this.selectedTimeframe === 'last10mins') {
+      const now = new Date().getTime();
+      const startTime = new Date(now - 10 * 60 * 1000).toISOString();
+      const endTime = new Date(now).toISOString();
+      this.logsService
+        .getLogs(startTime, endTime)
+        .subscribe((logs) => (this.logs = logs));
+    } else if (this.selectedTimeframe === 'last30mins') {
+      const now = new Date().getTime();
+      const startTime = new Date(now - 30 * 60 * 1000).toISOString();
+      const endTime = new Date(now).toISOString();
+      this.logsService
+        .getLogs(startTime, endTime)
+        .subscribe((logs) => (this.logs = logs));
+    } else if (this.selectedTimeframe === 'custom') {
+      this.logsService
+        .getLogs(this.customStartTime, this.customEndTime)
+        .subscribe((logs) => (this.logs = logs));
+    }
   }
 
-  formatDate(date: Date): Date {
-    const year = date.getFullYear();
-    const month = this.padZero(date.getMonth() + 1);
-    const day = this.padZero(date.getDate());
-    const hours = this.padZero(date.getHours());
-    const minutes = this.padZero(date.getMinutes());
-
-    return new Date(date);
-  }
-
-  padZero(num: number): string {
-    return num < 10 ? `0${num}` : `${num}`;
-  }
-
-  toggleColumn(columnName: string) {
-    this.showColumns[columnName] = !this.showColumns[columnName];
+  toggleColumn(column: string): void {
+    this.showColumns[column] = !this.showColumns[column];
   }
 }

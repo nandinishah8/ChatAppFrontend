@@ -4,7 +4,7 @@
     <!-- Dropdown to select timeframe -->
     <div class="form-group">
         <label for="timeframe">Select Timeframe:</label>
-        <select class="form-control" id="timeframe" [(ngModel)]="selectedTimeframe" (change)="fetchLogs()">
+        <select class="form-control" id="timeframe" [(ngModel)]="selectedTimeframe" (ngModelChange)="getLogs()">
             <option value="last5mins">Last 5 mins</option>
             <option value="last10mins">Last 10 mins</option>
             <option value="last30mins">Last 30 mins</option>
@@ -16,7 +16,7 @@
             <input type="datetime-local" [(ngModel)]="customStartTime">
             <label for="customEndTime">End Time:</label>
             <input type="datetime-local" [(ngModel)]="customEndTime">
-            <button class="btn btn-secondary" (click)="fetchLogs()">Load Logs</button>
+            <button class="btn btn-secondary" (click)="getLogs()">Load Logs</button>
         </div>
     </div>
 
@@ -42,6 +42,8 @@
             Request Body
         </label>
     </div>
+
+    <button class="btn btn-primary" (click)="getLogs()">Fetch Logs</button>
 
 
 
