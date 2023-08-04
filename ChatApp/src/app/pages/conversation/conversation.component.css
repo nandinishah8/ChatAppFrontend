@@ -13,10 +13,6 @@ body {
 #chat-container {
     display: flex;
     flex-grow: 1;
-    min-width: 800px;
-    max-width: 2000px;
-   
-    height: 600px;
     background: #FFF;
     border-radius: 10px;
 }
@@ -79,23 +75,31 @@ strong {
 
 /* Styles for individual chat messages */
 .chat-message {
+display: flex;
+    flex-direction: column;
+    padding: 10px;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.chat-message {
+    /* Common styles for chat messages */
     padding: 8px;
     border-radius: 8px;
-    max-width:fit-content;
+    max-width: 80%;
     margin: 4px 0;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
+    max-width: fit-content;
+    align-self: flex-end;
 }
 
 .outgoing {
     background-color: #047BD5;
     color: #fff;
-    /* align-self: flex-end; */
+    align-self: flex-end;
     max-width: fit-content;
+    margin-left: auto;
     padding: 8px;
     border-radius: 8px;
-    max-width:fit-content;
     cursor: pointer;
     display: flex;
 }
@@ -103,7 +107,8 @@ strong {
 .incoming {
     background-color: #f1f1f1;
     color: #333;
-    /* align-self: flex-start; */
+     align-self: flex-start;
+     margin-right: auto;
 }
 
 /* Styles for editor actions */

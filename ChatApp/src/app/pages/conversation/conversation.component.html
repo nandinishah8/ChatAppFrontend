@@ -28,7 +28,7 @@
                 </div>
             </nav>
             <div class="chat-container">
-                <div class="chat-messages">
+                <div class="chat-messages" style="height: 492px;">
                     <div [ngClass]="{'chat-message outgoing': message.senderId === currentUserId, 'chat-message incoming': message.senderId !== currentUserId
                         }" *ngFor="let message of messages" (contextmenu)="onContextMenu($event, message)">
                         <span class="message-content" *ngIf="!message.editMode && !message.deleteMode">{{
@@ -47,8 +47,8 @@
 
                         <div *ngIf="message.editMode">
                             <!-- Inline editor for editing the message -->
-                            <input type="text" [(ngModel)]="message.editedContent" />
-                            <button (click)="onAcceptEdit(message)">Accept</button>
+                            <input type="text" [(ngModel)]="message.editedContent" /> &nbsp;
+                            <button (click)="onAcceptEdit(message)">Accept</button> &nbsp;
                             <button (click)="onDeclineEdit(message)">Decline</button>
                         </div>
 
